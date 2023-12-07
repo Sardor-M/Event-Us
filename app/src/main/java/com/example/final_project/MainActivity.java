@@ -21,5 +21,4 @@ public class MainActivity extends AppCompatActivity {
         searchView  = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recyclerView);
     }
-
 }
