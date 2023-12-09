@@ -9,10 +9,7 @@ public interface EventbriteApiService {
 
     @GET("events/search")
     Call<EventResponse> searchEvents(
-            @Header("Authorization") String authToken,
             @Query("q") String query,
-            @Query("location.latitude") double latitude,
-            @Query("location.longitude") double longitude,
-            @Query("location.distance") String distance
-    );
+            @Header("Authorization") String authToken
+        );
 }
