@@ -4,13 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 
 import com.example.final_project.adapters.EventListAdapter;
 import com.example.final_project.models.Event;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +29,15 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SearchView searchView;
-    private RecyclerView recyclerView;
+
+    private ViewPager2 viewPager2;
+    private TabLayout tabLayout;
+
+    private EventListAdapter adapter;
+
+    private FragmentStateAdapter pageAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,33 +45,78 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().setTitle(Html.fromHtml("<font color=\'black\'>"+"Event Search"+"</font>"));
 
-        searchView = findViewById(R.id.searchView);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Data binding of the search view
+        viewPager2 = findViewById(R.id.viewpager);
+        tabLayout = findViewById(R.id.tabLayout);
 
-        fetchService();
+        viewPager2.setUserInputEnabled(true);
+        pageAdapter = new SearchFragmentPagerAdapter(this);
+
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            tab.setText(position == 0 ? "Search" : "Favorites");
+        }).attach();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab){
+                if(tab.getText().equals("Search")){
+                    viewPager2.setCurrentItem(0, true);
+                } else if (tab.getText().equals("Favorites")){
+                    viewPager2.setCurrentItem(1, true);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab){
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab){
+
+            }
+        });
     }
 
-    public void fetchService() {
+    public class SearchFragmentPagerAdapter extends FragmentStateAdapter{
+
+            public SearchFragmentPagerAdapter(@NonNull AppCompatActivity fragmentActivity) {
+                super(fragmentActivity);
+            }
+
+            @NonNull
+            @Override
+            public androidx.fragment.app.Fragment createFragment(int position) {
+                if(position == 0){
+                    return new SearchFragment();
+                } else {
+                    return new FavoritesFragment();
+                }
+            }
+
+            @Override
+            public int getItemCount() {
+                return 2;
+            }
+    }
+
+
+    public void fetchService(String query) {
         EventbriteApiService apiService = RetrofitClient
-                .getClient("https://www.eventbriteapi.com/v3/")
+                .getClient("https://www.eventbriteapi.com/v3/events/")
                 .create(EventbriteApiService.class);
 
 
-        double latitude = 37.773972;
-        double longitude = -122.431297;
-
         // Will change the token with a valid one
-        Call<EventResponse> call = apiService.searchEvents("Api_Token_WillBeReplaced", "music", latitude, longitude, "10km");
+        Call<EventResponse> call = apiService.searchEvents(query, "Bearer JW2VU6ONX45KL5YNUMTV");
 
         call.enqueue(new Callback<EventResponse>() {
             @Override
             public void onResponse(@NonNull Call<EventResponse> call, @NonNull Response<EventResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Event> events = response.body().getEvents();
-                    EventListAdapter adapter = new EventListAdapter(new ArrayList<>(events));
-                    recyclerView.setAdapter(adapter);
+                   adapter.updateEvents(new ArrayList<>(response.body().getEvents()));
                 } else {
                     Log.e("API ERROR Encountered", "Response not successful or body is null");
                 }

@@ -12,6 +12,7 @@ import com.example.final_project.R;
 import com.example.final_project.models.Event;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
 
@@ -25,7 +26,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-            textViewName = (TextView) view.findViewById(R.id.textViewName);
+            textViewName = (TextView) view.findViewById(R.id.textView);
             textViewDescription = (TextView) view.findViewById(R.id.textViewDescription);
             textViewDate = (TextView) view.findViewById(R.id.textViewDate);
         }
@@ -43,8 +44,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_event, viewGroup, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_event, parent, false);
         return new ViewHolder(view);
     }
 
@@ -57,6 +58,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     @Override
     public int getItemCount() {
         return localDataSet.size();
+    }
+
+    public void updateEvents(List<Event> newEvents) {
+        localDataSet.clear();
+        localDataSet.addAll(newEvents);
+        notifyDataSetChanged();
     }
 
 }
