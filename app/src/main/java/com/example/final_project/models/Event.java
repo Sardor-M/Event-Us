@@ -1,57 +1,40 @@
 package com.example.final_project.models;
 
+import java.util.Objects;
+
 public class Event {
-    private String name;
-    private String description;
-    private String date;
-    private String venue;
-    private String time;
+    public String event;
+    public String id;
+    public String date;
+    public String category;
+    public String venue;
 
-    public Event (String name, String description, String date, String venue, String time){
-        this.name = name;
-        this.description = description;
+    public Event(String id,String event,String date,String category,String venue){
+        this.id = id;
+        this.event = event;
         this.date = date;
-        this.venue= venue;
-        this.time = time;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public String getDescription(){
-        return description;
-    }
-
-    public String getDate(){
-        return date;
-    }
-
-    public String getVenue(){
-        return venue;
-    }
-
-    public String getTime(){
-        return time;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setDescription(String description){
-        this.description = description;
-    }
-
-    public void setDate(String date){
-        this.date = date;
-    }
-
-    public void setVenue(String venue){
+        this.category = category;
         this.venue = venue;
     }
 
-    public void setTime(String time){
-        this.time = time;
+    public Event(){
+        this.id = "";
+        this.event = "N/A";
+        this.date = "N/A";
+        this.category = "N/A";
+        this.venue = "N/A";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event1 = (Event) o;
+        return Objects.equals(id, event1.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(event, id, date, category, venue);
     }
 }

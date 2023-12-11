@@ -2,39 +2,22 @@ package com.example.final_project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
 
-import com.example.final_project.adapters.EventListAdapter;
-import com.example.final_project.models.Event;
+import com.example.final_project.fragments.FavoriteFragment;
+import com.example.final_project.fragments.SearchFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
 
-
     private ViewPager2 viewPager2;
     private TabLayout tabLayout;
-
-    private EventListAdapter adapter;
-
     private FragmentStateAdapter pageAdapter;
 
 
@@ -92,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 if(position == 0){
                     return new SearchFragment();
                 } else {
-                    return new FavoritesFragment();
+                    return new FavoriteFragment();
                 }
             }
 
@@ -102,30 +85,29 @@ public class MainActivity extends AppCompatActivity {
             }
     }
 
-
-    public void fetchService(String query) {
-        EventbriteApiService apiService = RetrofitClient
-                .getClient("https://www.eventbriteapi.com/v3/events/")
-                .create(EventbriteApiService.class);
-
-
-        // Will change the token with a valid one
-        Call<EventResponse> call = apiService.searchEvents(query, "Bearer JW2VU6ONX45KL5YNUMTV");
-
-        call.enqueue(new Callback<EventResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<EventResponse> call, @NonNull Response<EventResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                   adapter.updateEvents(new ArrayList<>(response.body().getEvents()));
-                } else {
-                    Log.e("API ERROR Encountered", "Response not successful or body is null");
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<EventResponse> call, @NonNull Throwable t) {
-                Log.e("API ERROR", t.getMessage());
-            }
-        });
-    }
+//    public void fetchService(String query) {
+//        EventbriteApiService apiService = RetrofitClient
+//                .getClient("https://www.eventbriteapi.com/v3/events/")
+//                .create(EventbriteApiService.class);
+//
+//
+//        // Will change the token with a valid one
+//        Call<EventResponse> call = apiService.searchEvents(query, "Bearer JW2VU6ONX45KL5YNUMTV");
+//
+//        call.enqueue(new Callback<EventResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<EventResponse> call, @NonNull Response<EventResponse> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                   adapter.updateEvents(new ArrayList<>(response.body().getEvents()));
+//                } else {
+//                    Log.e("API ERROR Encountered", "Response not successful or body is null");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<EventResponse> call, @NonNull Throwable t) {
+//                Log.e("API ERROR", t.getMessage());
+//            }
+//        });
+//    }
 }
