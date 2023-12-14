@@ -2,6 +2,8 @@ package com.example.final_project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -13,77 +15,83 @@ import com.example.final_project.fragments.SearchFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class MainActivity extends AppCompatActivity {
-
     private ViewPager2 viewPager2;
-    private TabLayout tabLayout;
-    private FragmentStateAdapter pageAdapter;
+    private TabLayout sfTabLayout;
 
-
+    private FragmentStateAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().setTitle(Html.fromHtml("<font color=\'black\'>"+"Event Search"+"</font>"));
 
-        // Data binding of the search view
-        viewPager2 = findViewById(R.id.viewpager);
-        tabLayout = findViewById(R.id.tabLayout);
+        viewPager2 = findViewById(R.id.viewpager); //Data Binding
+        sfTabLayout = findViewById(R.id.tabLayout);
 
         viewPager2.setUserInputEnabled(true);
-        pageAdapter = new SearchFragmentPagerAdapter(this);
 
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
-            tab.setText(position == 0 ? "Search" : "Favorites");
+        pagerAdapter = new SearchFragmentPagerAdapter(this);
+        viewPager2.setAdapter(pagerAdapter);
+
+        new TabLayoutMediator(sfTabLayout,viewPager2,(tab, position) -> {
+            tab.setText(position==0?"Search":"Favorites");
         }).attach();
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+        sfTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab){
+            public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getText().equals("Search")){
-                    viewPager2.setCurrentItem(0, true);
-                } else if (tab.getText().equals("Favorites")){
-                    viewPager2.setCurrentItem(1, true);
+                    viewPager2.setCurrentItem(0,true);
+                }
+                else if(tab.getText().equals("Favorites")){
+                    //Toast.makeText(MainActivity.this,tab.getText(), Toast.LENGTH_SHORT).show();
+                    viewPager2.setCurrentItem(1,true);
                 }
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab){
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab){
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
+
     }
 
     public class SearchFragmentPagerAdapter extends FragmentStateAdapter{
 
-            public SearchFragmentPagerAdapter(@NonNull AppCompatActivity fragmentActivity) {
-                super(fragmentActivity);
-            }
+        public SearchFragmentPagerAdapter(@NonNull @NotNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
+        }
 
-            @NonNull
-            @Override
-            public androidx.fragment.app.Fragment createFragment(int position) {
-                if(position == 0){
-                    return new SearchFragment();
-                } else {
-                    return new FavoriteFragment();
-                }
-            }
+        @NonNull
+        @NotNull
+        @Override
+        public Fragment createFragment(int position) {
 
-            @Override
-            public int getItemCount() {
-                return 2;
+            switch (position){
+                case 0: return new SearchFragment();
+                case 1: return new FavoriteFragment();
+                default: return new SearchFragment();
             }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
     }
+}
 
 //    public void fetchService(String query) {
 //        EventbriteApiService apiService = RetrofitClient
@@ -110,4 +118,3 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-}
