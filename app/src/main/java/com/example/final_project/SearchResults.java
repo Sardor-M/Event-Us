@@ -70,23 +70,16 @@ public class SearchResults extends AppCompatActivity {
     private void getData() {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://ticketserver2571-new.wl.r.appspot.com/api/search?keyword="
-                + keyword
-                + "&segmentId="
-                + segmentId
-                + "&radius="
-                + distance
-                + "&unit="
-                + unit
-                + "&latlong="
-                + latlong;
+        String url = "https://ticketserver2571-new.wl.r.appspot.com/api/search?keyword=" + keyword
+                + "&latlong=" + latlong + "&location=" + location + "&segmentId=" + segmentId + "&unit=" + unit
+                + "&radius=" + distance;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
                 (JSONArray) null,
                 response -> {
-                    for (int i = 0; i< response.length(); i++){
+                    for (int i = 0; i < response.length(); i++) {
                         try {
                             JSONObject jsonObject = response.getJSONObject(i);
                             eventList.add(new Event(
@@ -96,20 +89,20 @@ public class SearchResults extends AppCompatActivity {
                                     jsonObject.getString("Category"),
                                     jsonObject.getString("Venue")
                             ));
-                            Toast.makeText(this, jsonObject.getString("Category")+jsonObject.getString("Venue"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, jsonObject.getString("Category") + jsonObject.getString("Venue"), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }
                     buildRecyclerView();
-                 },
-                    error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
-                 );
+                },
+                error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        );
         queue.add(jsonArrayRequest);
     }
 
-    private void buildRecyclerView(){
+    private void buildRecyclerView() {
         eventAdapter = new EventAdapter(eventList, SearchResults.this, false);
         // eventAdapter = new EventAdapter(eventList, SearchResults.this, false);
 

@@ -7,9 +7,9 @@
         <item>All</item>
         <item>Music</item>
         <item>Sports</item>
-        <item>Arts </item>
+        <item>Arts &amp; Theatre </item>
         <item>Film</item>
-        <item>Other</item>
+        <item>Miscellaneous</item>
     </string-array>
 
     <string-array name="units">
