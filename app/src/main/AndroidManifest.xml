@@ -22,9 +22,15 @@
             android:value="AIzaSyCvZM6mCyefWr6MievwvGIRg9b3ODLi4Sg" />
 
         <activity android:name=".EventDetailsActivity"></activity>
-        <activity android:name=".SearchResults" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".SearchResults"
+            android:exported="false"
+            android:autoVerify="true" />
+
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -5,7 +5,6 @@ import static androidx.constraintlayout.motion.widget.Debug.getLocation;
 import static java.security.AccessController.checkPermission;
 
 import android.annotation.SuppressLint;
-import android.app.appsearch.SearchResults;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -28,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.final_project.R;
+import com.example.final_project.SearchResults;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
