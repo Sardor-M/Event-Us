@@ -137,7 +137,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void getData() {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "https://ticketserver2571-new.wl.r.appspot.com/api/details?eventId=" + id;
+        String url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=UpndiORgLiVlK34lmqnoP9BcSfPWhFuXapi/search?keyword=" + id;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 url,
