@@ -70,7 +70,7 @@ public class SearchResults extends AppCompatActivity {
     private void getData() {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://ticketserver2571-new.wl.r.appspot.com/api/search?keyword=" + keyword
+        String url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=UpndiORgLiVlK34lmqnoP9BcSfPWhFuXapi/search?keyword=" + keyword
                 + "&latlong=" + latlong + "&location=" + location + "&segmentId=" + segmentId + "&unit=" + unit
                 + "&radius=" + distance;
 
